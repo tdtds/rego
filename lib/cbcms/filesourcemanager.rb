@@ -11,6 +11,7 @@ module CBCMS
 
 		def initialize( path )
 			@path = path
+			raise ArgumentError unless FileTest::exist?( @path )
 			@files = Dir["#{@path}*"].sort.map{|f| f.sub( /#{path}/, '' )}
 		end
 

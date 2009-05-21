@@ -1,6 +1,17 @@
 $: << 'lib'
 require 'cbcms/filesourcemanager'
 
+describe CBCMS::FileSourceManager, 'when given bad path' do
+	it 'should raise ArgumentError' do
+		begin
+			CBCMS::FileSourceManager::new( 'bad path name' )
+			violated 'fail'
+		rescue
+			$!.class.should eql( ArgumentError )
+		end
+	end
+end
+
 describe CBCMS::FileSourceManager, 'when given existent path' do
 	before do
 		@path = 'src'
