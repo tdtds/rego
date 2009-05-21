@@ -1,7 +1,7 @@
 $: << 'lib'
 require 'cbcms/filesourcemanager'
 
-describe CBCMS::FileSourceManager, 'list up directory' do
+describe CBCMS::FileSourceManager, 'when given existent path' do
 	before do
 		@path = 'src'
 		@files = %w(a b c d e)
@@ -16,7 +16,7 @@ describe CBCMS::FileSourceManager, 'list up directory' do
 		@fsm.path.should eql( @path + '/' )
 	end
 
-	it 'should count of files' do
+	it 'should be count of files' do
 		@fsm.size.should == @files.size
 	end
 
