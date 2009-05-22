@@ -4,9 +4,10 @@
 # Copyright (C) 2009 by TADA Tadashi
 # Distributed under GPL
 #
+require 'cbcms/sourcemanager'
 
 module CBCMS
-	class FileSourceManager
+	class FileSourceManager < SourceManager
 		attr_reader :path
 
 		def initialize( path )
