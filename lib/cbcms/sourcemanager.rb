@@ -10,5 +10,9 @@ module CBCMS
 		def initialize
 			raise StandardError::new( "#{self.class} cannot make a instance." )
 		end
+
+		def self.create( src )
+			FileSourceManager::new( src )
+		end
 	end
 end
