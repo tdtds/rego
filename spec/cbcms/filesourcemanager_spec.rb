@@ -1,4 +1,5 @@
-$: << 'lib'
+$:.unshift( "#{File.dirname( __FILE__ )}/.." )
+require 'spec_helper'
 require 'cbcms/filesourcemanager'
 
 describe CBCMS::FileSourceManager, 'when given bad path' do
@@ -15,11 +16,7 @@ end
 describe CBCMS::FileSourceManager, 'when given existent path' do
 	before do
 		@path = 'src'
-		@files = %w(a b c d e)
-		Dir::mkdir( @path ) unless FileTest::exist?( @path )
-		@files.each do |file|
-			open( "#{@path}/#{file}", 'w' ) {|f| f.write( file ) }
-		end
+		@files = make_source_files( @path )
 		@fsm = CBCMS::FileSourceManager::new( @path + '/' )
 	end
 
@@ -40,7 +37,7 @@ describe CBCMS::FileSourceManager, 'when given existent path' do
 	end
 
 	after do
-		system( "rm -rf #{@path}" )
+		delete_source_files( @path )
 		@fsm = nil
 	end
 end
