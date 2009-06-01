@@ -16,7 +16,7 @@ end
 
 describe CBCMS::SourceManager, 'when giving a path of directory' do
 	before do
-		@path = 'src'
+		@path = 'src/'
 		@files = make_source_files( @path )
 	end
 
@@ -26,5 +26,16 @@ describe CBCMS::SourceManager, 'when giving a path of directory' do
 
 	after do
 		delete_source_files( @path )
+	end
+end
+
+describe CBCMS::SourceManager, 'when giving unknown path type' do
+	it 'should raise ArgumentError' do
+		begin
+			CBCMS::SourceManager::new( nil )
+			violated 'fail'
+		rescue
+			$!.class.should eql( ArgumentError )
+		end
 	end
 end

@@ -12,7 +12,12 @@ module CBCMS
 		end
 
 		def self.create( src )
-			FileSourceManager::new( src )
+			case
+			when src =~ %r|/$|
+				FileSourceManager::new( src )
+			else
+				raise ArgumentError( 'unknown path type' )
+			end
 		end
 	end
 end
