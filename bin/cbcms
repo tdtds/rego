@@ -1,0 +1,26 @@
+#!/home/sho/bin/ruby19
+#
+# cbcms: Cache Based Contents Management System run command.
+#
+# Copyright (C) 2010 by TADA Tadashi <t@tdtds.jp>
+# Distributed under GPL.
+#
+
+$:.unshift( 'lib' )
+
+src = ARGV.shift
+dest = ARGV.shift
+
+unless src and dest then
+	$stderr.puts <<-USAGE.gsub( /^\t\t/, '' )
+		#{File::basename $0}: cache based content management system runtime.
+		usage: #{File::basename $0} <src_dir> <dest_dir>
+
+		src_dir:  source directory of contents.
+		dest_dir: destination dirctory to generate contents.
+	USAGE
+	exit 1
+end
+
+require 'cbcms'
+CBCMS::App::new( src, dest ).run
