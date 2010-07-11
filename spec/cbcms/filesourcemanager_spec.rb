@@ -3,7 +3,16 @@ require 'spec_helper'
 require 'cbcms/filesourcemanager'
 
 describe CBCMS::FileSourceManager, 'when given bad path' do
-	it 'should raise ArgumentError' do
+	it 'should raise ArgumentError by nil' do
+		begin
+			CBCMS::FileSourceManager::new( nil )
+			violated 'fail'
+		rescue
+			$!.class.should eql( ArgumentError )
+		end
+	end
+
+	it 'should raise ArgumentError by no existent path' do
 		begin
 			CBCMS::FileSourceManager::new( 'bad path name' )
 			violated 'fail'
@@ -11,6 +20,7 @@ describe CBCMS::FileSourceManager, 'when given bad path' do
 			$!.class.should eql( ArgumentError )
 		end
 	end
+
 end
 
 describe CBCMS::FileSourceManager, 'when given existent path' do
