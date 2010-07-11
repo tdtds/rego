@@ -19,9 +19,12 @@ module CBCMS::Block
 		def method_missing( name, *args, &block )
 			if block
 				eval "
+					retried = false
 					begin
 						@child << #{name.to_s.capitalize}::new( &block ).result
 					rescue NameError
+						raise if retried
+						retried = true
 						require 'cbcms/block/#{name}'
 						retry
 					end

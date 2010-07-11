@@ -19,14 +19,15 @@ module CBCMS
 					d = @dest + pathname.to_s[@src.size,pathname.to_s.size].sub( /\.cbcms$/, '' )
 					processing( pathname, Pathname::new( d ), :template )
 				else
-					p "#{pathname}: other type"
+					d = @dest + pathname.to_s[@src.size,pathname.to_s.size]
+					processing( pathname, Pathname::new( d ), :dead_copy )
 				end
 			end
 		end
 
 		def processing( src, dest, filter )
 			result = ''
-			File::open( src ) do |f|
+			File::open( src, 'r:utf-8' ) do |f|
 				result = __send__( filter, f.read )
 			end
 			File::open( dest, 'w' ) do |f|
@@ -41,6 +42,10 @@ module CBCMS
 
 		def do_template( &block )
 			CBCMS::Block::Template::new( &block ).result
+		end
+
+		def dead_copy( tmpl )
+			tmpl
 		end
 	end
 end
