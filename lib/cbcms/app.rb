@@ -38,7 +38,7 @@ module CBCMS
 					f.write( result )
 				end
 			rescue MakeLink
-				dest.make_symlink( src )
+				dest.make_symlink( src ) rescue Errno::EEXIST
 			end
 		end
 
