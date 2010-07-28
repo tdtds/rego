@@ -21,6 +21,8 @@ module CBCMS
 				when /\.cbcms$/
 					d = @dest + pathname.to_s[@src.size,pathname.to_s.size].sub( /\.cbcms$/, '' )
 					processing( pathname, Pathname::new( d ), :template )
+				when /\.ignore$/
+					# ignore this file
 				else
 					d = @dest + pathname.to_s[@src.size,pathname.to_s.size]
 					processing( pathname, Pathname::new( d ), :symlink )
