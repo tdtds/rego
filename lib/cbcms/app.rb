@@ -16,16 +16,20 @@ module CBCMS
 		end
 
 		def run
-			Pathname::glob( "#{@src}/**" ) do |pathname|
-				case pathname.to_s
-				when /\.cbcms$/
-					d = @dest + pathname.to_s[@src.size,pathname.to_s.size].sub( /\.cbcms$/, '' )
-					processing( pathname, Pathname::new( d ), :template )
-				when /\.ignore$/
-					# ignore this file
+			Pathname::glob( "#{@src}/**/*" ) do |pathname|
+				if pathname.directory?
+					Pathname::new(@dest + pathname.to_s[@src.size,pathname.to_s.size]).mkpath
 				else
-					d = @dest + pathname.to_s[@src.size,pathname.to_s.size]
-					processing( pathname, Pathname::new( d ), :symlink )
+					case pathname.to_s
+					when /\.cbcms$/
+						d = @dest + pathname.to_s[@src.size,pathname.to_s.size].sub( /\.cbcms$/, '' )
+						processing( pathname, Pathname::new( d ), :template )
+					when /\.ignore$/
+						# ignore this file
+					else
+						d = @dest + pathname.to_s[@src.size,pathname.to_s.size]
+						processing( pathname, Pathname::new( d ), :symlink )
+					end
 				end
 			end
 		end
