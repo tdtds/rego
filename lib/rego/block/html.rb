@@ -1,11 +1,11 @@
 #
-# html.rb: CBCMS HTML and elements Block
+# html.rb: REGO HTML and elements Block
 #
 # Copyright (C) 2010 by TADA Tadashi
 # Distributed under GPL.
 #
 
-module CBCMS::Block
+module REGO::Block
 	class Html < Template
 		def result
 			<<-HTML.gsub( /^\t*/, '' )

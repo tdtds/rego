@@ -1,8 +1,7 @@
 #!/home/sho/bin/ruby19
 # -*- coding: utf-8; -*-
 #
-#
-# cbcms: Cache Based Contents Management System run command.
+# rego.rb: A web contents management system to generate static pages by building blocks.
 #
 # Copyright (C) 2010 by TADA Tadashi <t@tdtds.jp>
 # Distributed under GPL.
@@ -24,5 +23,5 @@ unless src and dest then
 	exit 1
 end
 
-require 'cbcms'
-CBCMS::App::new( src, dest ).run
+require 'rego'
+REGO::App::new( src, dest ).run

@@ -1,14 +1,14 @@
 #
-# app.rb: CBCMS Application 
+# app.rb: REGO Application 
 #
 # Copyright (C) 2010 by TADA Tadashi
 # Distributed under GPL.
 #
 require 'pathname'
 
-module CBCMS
-	class CBCMSError < ::StandardError; end
-	class MakeLink < CBCMSError; end
+module REGO
+	class REGOError < ::StandardError; end
+	class MakeLink < REGOError; end
 
 	class App
 		def initialize( src, dest )
@@ -21,8 +21,8 @@ module CBCMS
 					Pathname::new(@dest + pathname.to_s[@src.size,pathname.to_s.size]).mkpath
 				else
 					case pathname.to_s
-					when /\.cbcms$/
-						d = @dest + pathname.to_s[@src.size,pathname.to_s.size].sub( /\.cbcms$/, '' )
+					when /\.rego$/
+						d = @dest + pathname.to_s[@src.size,pathname.to_s.size].sub( /\.rego$/, '' )
 						processing( pathname, Pathname::new( d ), :template )
 					when /\.ignore$/
 						# ignore this file
@@ -54,7 +54,7 @@ module CBCMS
 		end
 
 		def do_template( &block )
-			CBCMS::Block::Template::new( &block ).result
+			REGO::Block::Template::new( &block ).result
 		end
 
 		def dead_copy( tmpl )
