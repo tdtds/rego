@@ -16,40 +16,41 @@ module REGO
 		end
 
 		def run
-			Pathname::glob( "#{@src}/**/*" ) do |pathname|
-				if pathname.directory?
-					Pathname::new(@dest + pathname.to_s[@src.size,pathname.to_s.size]).mkpath
+			Pathname::glob( "#{@src}/**/*" ) do |src|
+				relative = src.to_s[@src.size, src.to_s.size]
+
+				if src.directory?
+					Pathname::new( @dest + relative ).mkpath
 				else
-					case pathname.to_s
+					case src.to_s
 					when /\.rego$/
-						d = @dest + pathname.to_s[@src.size,pathname.to_s.size].sub( /\.rego$/, '' )
-						processing( pathname, Pathname::new( d ), :template )
+						processing( src, @dest, relative.sub( /\.rego$/, '' ), :template )
 					when /\.ignore$/
 						# ignore this file
 					else
-						d = @dest + pathname.to_s[@src.size,pathname.to_s.size]
-						processing( pathname, Pathname::new( d ), :symlink )
+						d = 
+						processing( src, @dest, relative, :symlink )
 					end
 				end
 			end
 		end
 
-		def processing( src, dest, filter )
+		def processing( src_file, dest_path, relative_file, filter )
 			result = ''
 			begin
-				File::open( src, 'r:utf-8' ) do |f|
-					result = __send__( filter, f.read )
+				File::open( src_file, 'r:utf-8' ) do |f|
+					result = __send__( filter, f.read, relative_file )
 				end
-				File::open( dest, 'w' ) do |f|
+				File::open( dest_path + relative_file, 'w' ) do |f|
 					f.write( result )
 				end
 			rescue MakeLink
-				dest.make_symlink( src ) rescue Errno::EEXIST
+				dest.make_symlink( src_file ) rescue Errno::EEXIST
 			end
 		end
 
-		def template( tmpl )
-			tmpl.insert( 0, "do_template {\n" ) << "\n}"
+		def template( tmpl, relative )
+			tmpl.insert( 0, "do_template {\nrelative '#{relative}'" ) << "\n}"
 			eval tmpl
 		end
 
@@ -57,11 +58,11 @@ module REGO
 			REGO::Block::Template::new( &block ).result
 		end
 
-		def dead_copy( tmpl )
+		def dead_copy( tmpl, relative )
 			tmpl
 		end
 
-		def symlink( tmpl )
+		def symlink( tmpl, relative )
 			raise MakeLink::new
 		end
 	end

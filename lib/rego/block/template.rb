@@ -13,6 +13,10 @@ module REGO::Block
 			self
 		end
 
+		def relative( file_name )
+			@@relative = file_name.sub( %r|/index.html$|, '/' )
+		end
+
 		def result
 			@child.join( "\n" )
 		end
