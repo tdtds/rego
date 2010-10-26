@@ -9,7 +9,8 @@ module REGO::Block
 	class Template
 		def initialize( &block )
 			@child = []
-			instance_eval( &block )
+			instance_eval( &block ) if block_given?
+			self
 		end
 
 		def result
@@ -35,6 +36,7 @@ module REGO::Block
 			else
 				eval "@#{name}, = args"
 			end
+			self
 		end
 	end
 end
