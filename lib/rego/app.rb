@@ -28,7 +28,6 @@ module REGO
 					when /\.ignore$/
 						# ignore this file
 					else
-						d = 
 						processing( src, @dest, relative, :symlink )
 					end
 				end
@@ -45,7 +44,7 @@ module REGO
 					f.write( result )
 				end
 			rescue MakeLink
-				dest.make_symlink( src_file ) rescue Errno::EEXIST
+				Pathname::new(dest_path + relative_file).make_symlink( src_file ) rescue Errno::EEXIST
 			end
 		end
 
