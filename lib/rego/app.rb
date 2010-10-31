@@ -24,7 +24,12 @@ module REGO
 				else
 					case src.to_s
 					when /\.rego$/
-						processing( src, @dest, relative.sub( /\.rego$/, '' ), :template )
+						r  = relative.sub( /\.rego$/, '' )
+						begin
+							next if src.mtime < Pathname::new( @dest + r ).mtime
+						rescue Errno::ENOENT
+						end
+						processing( src, @dest, r, :template )
 					when /\.ignore$/
 						# ignore this file
 					else
