@@ -16,7 +16,7 @@ module REGO
 		end
 
 		def run
-			Pathname::glob( "#{@src}/**/*" ) do |src|
+			Pathname::glob( "#{@src}/**/{.*,*}" ) do |src|
 				relative = src.to_s[@src.size, src.to_s.size]
 
 				if src.directory?
