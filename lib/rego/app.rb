@@ -11,8 +11,8 @@ module REGO
 	class MakeLink < REGOError; end
 
 	class App
-		def initialize( src, dest )
-			@src, @dest = src, dest
+		def initialize( src, dest, opt = {} )
+			@src, @dest, @opt = src, dest, opt
 		end
 
 		def run
@@ -26,7 +26,7 @@ module REGO
 					when /\.rego$/
 						r  = relative.sub( /\.rego$/, '' )
 						begin
-							next if src.mtime < Pathname::new( @dest + r ).mtime
+							next if !@opt[:force] && (src.mtime < Pathname::new( @dest + r ).mtime)
 						rescue Errno::ENOENT
 						end
 						processing( src, @dest, r, :template )
