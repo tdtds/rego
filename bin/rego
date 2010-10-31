@@ -25,7 +25,7 @@ dest = ARGV.shift
 
 unless src and dest then
 	$stderr.puts <<-USAGE.gsub( /^\t\t/, '' )
-		#{File::basename $0}: cache based content management system runtime.
+		#{File::basename $0}: A WCM system to generate static pages by building blocks.
 		usage: #{File::basename $0} [-f] <src_dir> <dest_dir>
 
 		--force, -f: force generating contents.
