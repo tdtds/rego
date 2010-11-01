@@ -54,7 +54,7 @@ module REGO
 		end
 
 		def template( tmpl, relative )
-			tmpl.insert( 0, "do_template {\nrelative '#{relative}'" ) << "\n}"
+			tmpl.insert( 0, "do_template {\nrelative '#{relative}'\n" ) << "\n}"
 			eval tmpl
 		end
 
