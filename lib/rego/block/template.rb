@@ -23,22 +23,15 @@ module REGO::Block
 
 		def method_missing( name, *args, &block )
 			if block
-				eval "
-					retried = false
-					begin
-						@child << #{name.to_s.capitalize}::new( &block ).result
-					rescue NameError
-						unless $!.to_s.include?( 'REGO::Block::Template::#{name.to_s.capitalize}' ) then
-							raise
-						end
-						raise if retried
-						retried = true
-						require 'rego/block/#{name}'
-						retry
-					end
-				"
+				begin
+					klass = REGO::Block::const_get( name.to_s.capitalize )
+					@child << klass::new( &block ).result
+				rescue NameError
+					require "rego/block/#{name}"
+					retry
+				end
 			else
-				eval "@#{name}, = args"
+				instance_variable_set "@#{name}", args[0]
 			end
 			self
 		end
