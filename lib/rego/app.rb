@@ -29,6 +29,7 @@ module REGO
 							next if !@opt[:force] && (src.mtime < Pathname::new( @dest + r ).mtime)
 						rescue Errno::ENOENT
 						end
+						$stderr.puts relative if @opt[:verbose]
 						processing( src, @dest, r, :template )
 					when /\.ignore$/
 						# ignore this file

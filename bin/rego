@@ -12,8 +12,10 @@ $:.unshift( 'lib' )
 opts = {}
 while opt = ARGV.shift
 	case opt
-	when '-f', '--force' # force options
+	when '-f', '--force'   # force options
 		opts[:force] = true
+	when '-V', '--verbose' # verbose options
+		opts[:verbose] = true
 	else
 		ARGV.unshift opt
 		break
@@ -28,9 +30,10 @@ unless src and dest then
 		#{File::basename $0}: A WCM system to generate static pages by building blocks.
 		usage: #{File::basename $0} [-f] <src_dir> <dest_dir>
 
-		--force, -f: force generating contents.
-		src_dir:     source directory of contents.
-		dest_dir:    destination dirctory to generate contents.
+		--force, -f:   force generating contents.
+		--verbose, -V: show verbose messages.
+		src_dir:       source directory of contents.
+		dest_dir:      destination dirctory to generate contents.
 	USAGE
 	exit 1
 end
