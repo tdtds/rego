@@ -1,1 +1,0 @@
-/home/sho/www/parabola.src/block/parabola.rb
