@@ -7,7 +7,13 @@
 # Distributed under GPL.
 #
 
-$:.unshift( 'lib' )
+require 'pathname'
+begin
+	bin = Pathname::new __FILE__
+	loop { bin = bin.readlink }
+rescue Errno::EINVAL
+	$:.unshift( bin.dirname + '../lib' )
+end
 
 opts = {}
 while opt = ARGV.shift
@@ -16,6 +22,10 @@ while opt = ARGV.shift
 		opts[:force] = true
 	when '-V', '--verbose' # verbose options
 		opts[:verbose] = true
+	when '-L', '--lib'     # append lib path
+		new_lib = ARGV.shift
+		raise ArgumentError::new( 'need parameter for -L option.' ) unless new_lib
+		$:.unshift( new_lib )
 	else
 		ARGV.unshift opt
 		break
@@ -28,12 +38,13 @@ dest = ARGV.shift
 unless src and dest then
 	$stderr.puts <<-USAGE.gsub( /^\t\t/, '' )
 		#{File::basename $0}: A WCM system to generate static pages by building blocks.
-		usage: #{File::basename $0} [-f] <src_dir> <dest_dir>
+		usage: #{File::basename $0} [-fVL] <src_dir> <dest_dir>
 
-		--force, -f:   force generating contents.
-		--verbose, -V: show verbose messages.
-		src_dir:       source directory of contents.
-		dest_dir:      destination dirctory to generate contents.
+		--force, -f:      force generating contents.
+		--verbose, -V:    show verbose messages.
+		--lib, -L <path>: append block library path of your web site.
+		src_dir:          source directory of contents.
+		dest_dir:         destination dirctory to generate contents.
 	USAGE
 	exit 1
 end

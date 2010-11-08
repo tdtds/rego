@@ -27,7 +27,11 @@ module REGO::Block
 					klass = REGO::Block::const_get( name.to_s.capitalize )
 					@child << klass::new( &block ).result
 				rescue NameError
-					require "rego/block/#{name}"
+					begin
+						require name.to_s
+					rescue LoadError
+						require "rego/block/#{name}"
+					end
 					retry
 				end
 			else
