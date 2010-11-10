@@ -26,6 +26,8 @@ while opt = ARGV.shift
 		new_lib = ARGV.shift
 		raise ArgumentError::new( 'need parameter for -L option.' ) unless new_lib
 		$:.unshift( new_lib )
+	when /^-/
+		raise ArgumentError::new( "invalid option: #{opt}." )
 	else
 		ARGV.unshift opt
 		break
