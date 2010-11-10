@@ -15,32 +15,40 @@ rescue Errno::EINVAL
 	$:.unshift( bin.dirname + '../lib' )
 end
 
-opts = {}
-while opt = ARGV.shift
-	case opt
-	when '-f', '--force'   # force options
-		opts[:force] = true
-	when '-V', '--verbose' # verbose options
-		opts[:verbose] = true
-	when '-L', '--lib'     # append lib path
-		new_lib = ARGV.shift
-		raise ArgumentError::new( 'need parameter for -L option.' ) unless new_lib
-		$:.unshift( new_lib )
-	when /^-/
-		raise ArgumentError::new( "invalid option: #{opt}." )
-	else
-		ARGV.unshift opt
-		break
+class UsageError < ArgumentError; end
+
+begin
+	opts = {}
+	while opt = ARGV.shift
+		case opt
+		when '-f', '--force'   # force options
+			opts[:force] = true
+		when '-V', '--verbose' # verbose options
+			opts[:verbose] = true
+		when '-L', '--lib'     # append lib path
+			new_lib = ARGV.shift
+			raise ArgumentError::new( "need a parameter for #{opt} option." ) unless new_lib
+			$:.unshift( new_lib )
+		when /^-/
+			raise ArgumentError::new( "invalid option: #{opt}." )
+		else
+			ARGV.unshift opt
+			break
+		end
 	end
-end
 
-src = ARGV.shift
-dest = ARGV.shift
+	src = ARGV.shift
+	dest = ARGV.shift
+	raise UsageError::new( 'no src or dest path.' ) unless src and dest
 
-unless src and dest then
+	require 'rego'
+	REGO::App::new( src, dest, opts ).run
+	exit 0
+
+rescue UsageError
 	$stderr.puts <<-USAGE.gsub( /^\t\t/, '' )
 		#{File::basename $0}: A WCM system to generate static pages by building blocks.
-		usage: #{File::basename $0} [-fVL] <src_dir> <dest_dir>
+		usage: #{File::basename $0} [-f] [-V] [-L <path>] <src_dir> <dest_dir>
 
 		--force, -f:      force generating contents.
 		--verbose, -V:    show verbose messages.
@@ -49,7 +57,8 @@ unless src and dest then
 		dest_dir:         destination dirctory to generate contents.
 	USAGE
 	exit 1
-end
 
-require 'rego'
-REGO::App::new( src, dest, opts ).run
+rescue ArgumentError
+	$stderr.puts $!
+	exit 1
+end
