@@ -7,14 +7,11 @@
 
 module REGO::Block
 	class Template
-		def initialize( &block )
+		def initialize( env, &block )
+			@env = env
 			@child = []
 			instance_eval( &block ) if block_given?
 			self
-		end
-
-		def relative( file_name )
-			@@relative = file_name.sub( %r|/index.html$|, '/' )
 		end
 
 		def result
@@ -25,7 +22,7 @@ module REGO::Block
 			if block
 				begin
 					klass = REGO::Block::const_get( name.to_s.capitalize )
-					@child << klass::new( &block ).result
+					@child << klass::new( @env, &block ).result
 				rescue NameError
 					begin
 						require name.to_s
