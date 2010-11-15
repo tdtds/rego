@@ -18,7 +18,9 @@ end
 class UsageError < ArgumentError; end
 
 begin
-	opts = {}
+	opts = {
+		:env => 'production',
+	}
 	while opt = ARGV.shift
 		case opt
 		when '-f', '--force'   # force options
@@ -29,6 +31,10 @@ begin
 			new_lib = ARGV.shift
 			raise ArgumentError::new( "need a parameter for #{opt} option." ) unless new_lib
 			$:.unshift( new_lib )
+		when '-e', '--env'
+			env = ARGV.shift
+			raise ArgumentError::new( "need a parameter for #{opt} option." ) unless env
+			opts[:env] = env
 		when /^-/
 			raise ArgumentError::new( "invalid option: #{opt}." )
 		else

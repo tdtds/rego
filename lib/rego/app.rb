@@ -18,7 +18,7 @@ module REGO
 			@env = {
 				:src => @src,
 				:dest => @dest
-			}
+			}.update( @opt )
 		end
 
 		def run
