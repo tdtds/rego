@@ -19,7 +19,7 @@ class UsageError < ArgumentError; end
 
 begin
 	opts = {
-		:env => 'production',
+		:server => 'production',
 	}
 	while opt = ARGV.shift
 		case opt
@@ -31,10 +31,10 @@ begin
 			new_lib = ARGV.shift
 			raise ArgumentError::new( "need a parameter for #{opt} option." ) unless new_lib
 			$:.unshift( new_lib )
-		when '-e', '--env'
-			env = ARGV.shift
-			raise ArgumentError::new( "need a parameter for #{opt} option." ) unless env
-			opts[:env] = env
+		when '-s', '--server'
+			server = ARGV.shift
+			raise ArgumentError::new( "need a parameter for #{opt} option." ) unless server
+			opts[:server] = server
 		when /^-/
 			raise ArgumentError::new( "invalid option: #{opt}." )
 		else
@@ -54,13 +54,14 @@ begin
 rescue UsageError
 	$stderr.puts <<-USAGE.gsub( /^\t\t/, '' )
 		#{File::basename $0}: A WCM system to generate static pages by building blocks.
-		usage: #{File::basename $0} [-f] [-V] [-L <path>] <src_dir> <dest_dir>
+		usage: #{File::basename $0} [-f] [-V] [-L <path>] [-s <env>] <src_dir> <dest_dir>
 
-		--force, -f:      force generating contents.
-		--verbose, -V:    show verbose messages.
-		--lib, -L <path>: append block library path of your web site.
-		src_dir:          source directory of contents.
-		dest_dir:         destination dirctory to generate contents.
+		--force, -f:        force generating contents.
+		--verbose, -V:      show verbose messages.
+		--lib, -L <path>:   append block library path of your web site.
+		--server, -s <env>: publishing environment name. default "production".
+		src_dir:            source directory of contents.
+		dest_dir:           destination dirctory to generate contents.
 	USAGE
 	exit 1
 
