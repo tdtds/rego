@@ -1,4 +1,4 @@
-#!/home/sho/bin/ruby19
+#!/home/sho/bin/ruby
 # -*- coding: utf-8; -*-
 #
 # rego.rb: A web contents management system to generate static pages by building blocks.
