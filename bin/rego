@@ -1,4 +1,4 @@
-#!/home/sho/bin/ruby
+#!/usr/bin/env ruby
 # -*- coding: utf-8; -*-
 #
 # rego.rb: A web contents management system to generate static pages by building blocks.
@@ -6,14 +6,6 @@
 # Copyright (C) 2010 by TADA Tadashi <t@tdtds.jp>
 # Distributed under GPL.
 #
-
-require 'pathname'
-begin
-	bin = Pathname::new __FILE__
-	loop { bin = bin.readlink }
-rescue Errno::EINVAL
-	$:.unshift( bin.dirname + '../lib' )
-end
 
 class UsageError < ArgumentError; end
 
@@ -52,8 +44,10 @@ begin
 	exit 0
 
 rescue UsageError
+	require 'rego/version'
+
 	$stderr.puts <<-USAGE.gsub( /^\t\t/, '' )
-		#{File::basename $0}: A WCM system to generate static pages by building blocks.
+		#{File::basename $0}: A WCM system to generate static pages by building blocks. Ver.#{REGO::VERSION}
 		usage: #{File::basename $0} [-f] [-V] [-L <path>] [-s <env>] <src_dir> <dest_dir>
 
 		--force, -f:        force generating contents.
