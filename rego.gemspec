@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 require "rego/version"
 
 Gem::Specification.new do |s|
-  s.name        = "rego"
+  s.name        = "rego_wcm"
   s.version     = REGO::VERSION
   s.authors     = ["TADA Tadashi"]
   s.email       = ["t@tdtds.jp"]
